@@ -1,0 +1,64 @@
+extends base
+
+mixin tripCard(destination, image1, image2, image3, ratingsQuantity, rating, duration, distance, link)
+  .card
+    .top-section
+      img(src=`image-test.png` alt='')
+      .image-container
+        .nav
+          img(onclick='change_img(this)' src=`image-test.png` alt='')
+          img(onclick='change_img(this)' src=`image-test.png` alt='')
+          img(onclick='change_img(this)' src=`image-test.png` alt='')
+      .price= `⭐${rating} | ${ratingsQuantity}🧑`
+    #parallelogram
+    .product-info
+      .name= destination
+      .dis= `• ${distance} km`
+      .dis= `• ${duration} dite`
+      a.btn(href=link) Learn More
+mixin offerCard(destination, image1, image2, tripRating, clinicRating, clinicName, link)
+  .card
+    .top-section
+      .first-img
+        img(src="image-test.png", alt="")
+      .second-img
+        img(src="image2-test.png", alt="")
+      .price= `🗼${tripRating} | ${clinicRating}🦷`
+    //- .square
+    #parallelogram
+    .product-info
+      .name= destination
+      .name= clinicName
+      .dis= `• ${distance} km`
+      .dis= `• ${duration} dite`
+      a.btn(href=link) Learn More
+mixin clinicCard(name, image1, image2, image3, ratingsQuantity, rating, location, description, link)
+  .card
+    .top-section
+      img(src=`image2-test.png` alt='')
+      .image-container 
+        .nav
+          img(onclick='change_img(this)' src=`image2-test.png` alt='')
+          img(onclick='change_img(this)' src=`image2-test.png` alt='')
+          img(onclick='change_img(this)' src=`image2-test.png` alt='')
+      .price= `⭐${rating} | ${ratingsQuantity}🧑`
+    #parallelogram
+    .product-info
+      .name= name
+      .dis.location= location
+      .dis.description.text-truncate.text-truncate--2= description
+      a.btn(href=link) Learn More
+
+block content 
+  link(rel="stylesheet", href="cards.css")
+  .main-container
+    -if(endpoint === '/trips')
+      for trip in docs 
+        +tripCard(trip.destination.address, trip.photo[0], trip.photo[1], trip.photo[2], trip.ratingsQuantity, trip.rating, trip.duration, trip.distance, `trips/${trip._id}`)
+    -if(endpoint === '/clinics')
+      for clinic in docs 
+        -const location = clinic.locations?.[0]?.address;
+        +clinicCard(clinic.name, clinic.photo[0], clinic.photo[1], clinic.photo[2], clinic.ratingsQuantity, clinic.rating, location, clinic.description, `clinics/${clinic._id}`)
+    -if(endpoint === '/offers')
+      -for(let i=0; i<offers.length;i++)
+        +offerCard(offers[i][0].destination.address, offers[i][0].photo[0], offers[i][1].photo[0], offers[i][0].rating, offers[i][1].rating, offers[i][1].name, `/offers/offer-${i + 1}`)

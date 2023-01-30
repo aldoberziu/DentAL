@@ -1,0 +1,55 @@
+section.sticky-top
+  .navbar#main-nav
+    a(href='/home')
+      .logo
+        img(src="logo.png", alt="")
+    .menu
+      ul
+        li
+          a(href='/clinics') Clinics
+        li
+          a(href='/trips') Trips
+        li
+          a(href='/offers') Offers
+        li
+          a(href='#about-us') About Us
+        li
+          a(href='#contact') Contact
+    .signup
+      a(href='#') JOIN US
+.d-flex.justify-content-around.second-nav
+  div
+    h5
+      i.fa-solid.fa-location-pin(style='color: rgba(60, 115, 123, 255);')
+      |  Location
+    hr
+    h6 Tirana - Albania
+  div
+    h5
+      i.fa-solid.fa-phone(style='color: rgba(60, 115, 123, 255);')
+      |  Call us today!
+    hr
+    h6
+      | +355682118131
+  div
+    h5
+      i.fa-solid.fa-clock(style='color: rgba(60, 115, 123, 255);')
+      |  Availability
+    hr
+    h6 Mon-Sun: 8:00 - 20:00
+  div
+    h5
+      i.fa-solid.fa-calendar-days(style='color: rgba(60, 115, 123, 255);')
+      |  Book now
+    hr
+    h6 info@dental.com
+script.
+  window.onscroll = function() {myFunction()};
+
+  function myFunction() {
+    if (document.documentElement.scrollTop > 50) {
+      document.getElementById("main-nav").className = "navbar-scroll";
+    } else {
+      document.getElementById("main-nav").className = "navbar";
+    }
+  }
