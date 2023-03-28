@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const tripSchema = new mongoose.Schema(
   {
@@ -7,6 +8,7 @@ const tripSchema = new mongoose.Schema(
       required: [true, 'A trip must have a name!'],
       trim: true,
       min: [5, 'A trip name must have more than 5 characters!'],
+      unique: true,
     },
     description: {
       type: String,
@@ -16,6 +18,9 @@ const tripSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A trip must have a price!'],
     },
+    discountedPrice: {
+      type: Number,
+    },
     duration: {
       type: Number,
       required: [true, 'A trip must have a duration time (days)'],
@@ -24,11 +29,12 @@ const tripSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A trip must have a distance (km)'],
     },
-    photo: [Number],
+    photo: [String],
     rating: {
       type: Number,
       min: [1, 'Rating must be above 1'],
       max: [5, 'Rating must be below 5'],
+      set: (val) => Math.round(val * 10) / 10,
     },
     ratingsQuantity: {
       type: Number,
@@ -71,7 +77,7 @@ const tripSchema = new mongoose.Schema(
         enum: ['Point'],
         required: [true, 'A trip must have a destination!'],
       },
-      coordinates: [Number],
+      coordinates: String,
       address: String,
       description: String,
     },
@@ -81,6 +87,11 @@ const tripSchema = new mongoose.Schema(
         required: [true, 'A trip must have a trip guide!'],
       },
     ],
+    organizer: {
+      type: String,
+      required: [true, 'A trip must have an organizer'],
+    },
+    slug: String,
   },
   {
     toJSON: { virtuals: true }, //this means that we want virtual properties part of the output
@@ -100,6 +111,15 @@ tripSchema.virtual('booking', {
   ref: 'Booking',
   foreignField: 'trip',
   localField: '_id',
+});
+
+tripSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+tripSchema.pre('save', function (next) {
+  this.discountedPrice = this.price - (this.price / 10);
+  next();
 });
 
 const Trip = mongoose.model('Trip', tripSchema);

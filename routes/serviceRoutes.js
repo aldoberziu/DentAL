@@ -6,7 +6,7 @@ const router = express.Router({ mergeParams: true });
 router
   .route('/')
   .get(serviceController.getAllServices)
-  .post(serviceController.setClinicId, serviceController.createService);
+  .post(serviceController.setClinicUserId, serviceController.createService);
 
 router
   .route('/:id')

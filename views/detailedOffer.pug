@@ -1,0 +1,142 @@
+extends base
+
+mixin overviewBoxTrip(label, text, icon)
+    .overview-box__detail
+        svg.overview-box__icon
+            use(xlink:href=`icons.svg#icon-${icon}`)
+        span.overview-box__label= label
+        span.overview-box__text= text
+mixin reviewCard(review)
+    .reviews__card
+        .reviews__avatar
+            img.reviews__avatar-img(src=`user-icon.png`)
+            h6.reviews__user= review.username
+        p.reviews__text= review.review
+        .reviews__rating
+            each star in [1,2,3,4,5]
+                svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
+                    use(xlink:href='icons.svg#icon-star')
+
+block content 
+    link(rel="stylesheet", href="detailed.css")
+    section.section-header
+        .header__hero
+            .header__hero-overlay &nbsp;
+            img.header__hero-img(src=`${offer.trip.imageCover}`)
+
+        .heading-box
+            h1.heading-primary(style="font-size: 40px;")
+                span= `${offer.trip.name}`
+            h1.heading-primary(style="font-size: 40px;")
+                span= `&`
+            h1.heading-primary(style="font-size: 40px;")
+                span= `${offer.clinic.name}`
+            .heading-box__group
+                .heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href='icons.svg#icon-phone')
+                    - const number = offer.clinic.phoneNumber.toString().startsWith('6');
+                    -if(number == true)
+                        span.heading-box__text= `+355${offer.clinic.phoneNumber}`
+                    -else
+                        span.heading-box__text= `+${offer.clinic.phoneNumber}`
+                .heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href='icons.svg#icon-email')
+                    span.heading-box__text.email= `${offer.clinic.email}`
+                .heading-box__detail
+                    span.heading-box__text= `BY: ${offer.trip.organizer}`
+
+    section.section-description
+        .overview-box
+            div
+                .overview-box__group
+                    .description-box
+                        h2.heading-secondary.ma-bt-lg= `About ${offer.clinic.name}`
+                        p.description__text= offer.clinic.description
+                    br
+                    h2.heading-secondary.ma-bt-lg Services
+                    -if(offer.services === 0 || offer.services === '' || offer.services === null)
+                        span.overview-box__label This clinic has no services
+                    -else
+                        -for(let i=0; i<offer.services.length;i++)
+                            -if(user)
+                                -booking_link = `https://mail.google.com/mail/?view=cm&fs=1&to=info.dentalapp@gmail.com&su=${user.name}+is+interested+in+purchasing+the+combined+offer+of+${offer.services[i].name}+service+by+${offer.clinic.name}+and+${offer.trip.name}&body=Service's+discounted+price:+${offer.services[i].discountedPrice}L%0D%0ATrip's+discounted+price:+${offer.trip.discountedPrice}L%0D%0ATotal:+${(offer.trip.discountedPrice+offer.services[i].discountedPrice)}L%0D%0ADuration:+${offer.trip.duration}+days%0D%0ADistance:+${offer.trip.distance}+km`
+                            -if(i % 2 == 0)
+                                .big-container
+                                    .small-container
+                                        svg.overview-box__icon(style="margin: 3px 10px 0px 0px")
+                                            use(xlink:href=`icons.svg#icon-tooth`)
+                                        span.overview-box__label= offer.services[i].name
+                                        span.overview-box__label= `*${offer.services[i].discountedPrice} L`
+                                        -if(user && user.role !== 'admin')
+                                            a(href=`${booking_link}`)
+                                                button.overview-box__label Book
+                                    span.overview-box__text.left= offer.services[i].description
+                            -else if(i % 2 != 0)
+                                .big-container
+                                    .small-container.odd
+                                        .title
+                                            svg.overview-box__icon(style="margin: 3px 10px 0px 0px")
+                                                use(xlink:href=`icons.svg#icon-tooth`)
+                                            span.overview-box__label= offer.services[i].name
+                                        .price 
+                                            span.overview-box__label= `*${offer.services[i].discountedPrice} L`
+                                        -if(user && user.role !== 'admin')
+                                            a(href=`${booking_link}`)
+                                                button.overview-box__label Book
+                                    span.overview-box__text.right= offer.services[i].description
+                        span.overview-box__text.left= `(*) Discounted price`
+        .description-box
+            h2.heading-secondary.ma-bt-lg= `About ${offer.trip.name}`
+            p.description__text= offer.trip.description
+            .overview-box__group
+                br
+                br
+                h2.heading-secondary.ma-bt-lg Quick facts
+                -for(let i=0; i<offer.trip.startDates.length;i++)
+                    - const date = offer.trip.startDates[i].toLocaleString('en-us', {month: 'long', year: 'numeric'})
+                    +overviewBoxTrip('Starting date', date, 'calendar')
+                +overviewBoxTrip('Price', `${offer.trip.discountedPrice} L`, 'coin')
+                +overviewBoxTrip('Distance', `${offer.trip.distance} km`, 'distance')
+                +overviewBoxTrip('Rating', `${offer.trip.rating} / 5`, 'star')
+                -if(user && user.role !== 'admin')
+                    .form2
+                        form.review
+                            .inputs
+                                .rating
+                                    input#star1(type='radio' name='star-rating' value='5' checked='checked')
+                                    label(for='star1')
+                                    input#star2(type='radio' name='star-rating' value='4' checked='checked')
+                                    label(for='star2')
+                                    input#star3(type='radio' name='star-rating' value='3' checked='checked')
+                                    label(for='star3')
+                                    input#star4(type='radio' name='star-rating' value='2' checked='checked')
+                                    label(for='star4')
+                                    input#star5(type='radio' name='star-rating' value='1' checked='checked')
+                                    label(for='star5')
+                                select.feedback-input.input#reviewUrl(name='doc-to-be-reviewed')
+                                    option.feedback-input(value=`http://127.0.0.1:8000/api/trips/${offer.trip.id}/reviews/trip`) Reviewing the trip
+                                    option.feedback-input(value=`http://127.0.0.1:8000/api/clinics/${offer.clinic.id}/reviews/clinic`) Reviewing the clinic
+                            .textarea
+                                textarea.feedback-input#review(for="review" name='review' placeholder='Review')
+                            .signup
+                                button REVIEW
+
+    section.section-cta
+        .cta
+            .cta__img.cta__img--logo
+                img(src='logo-square-white.png', alt='DentAL logo')
+            img.cta__img.cta__img--1(src=`${offer.trip.photo[0]}`, alt='Trip Image')
+            img.cta__img.cta__img--2(src=`${offer.clinic.photo[0]}`, alt='Clinic Image')
+            .cta__content
+                h2.heading-secondary What are you waiting for?
+                p.cta__text= `Good oral health. Amazing albanian adventure. Get the double opportunity now!`
+                
+                -//data-tour-id='${tour.id}' in order to access /:tourId
+                button.btn.btn--green.span-all-rows#book-tour() Book the deal here!
+                //h2.heading-secondary Not Available!
+
+                //- a.btn.btn--green.span-all-rows(href='/login') Login to book now
+    script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')
+    //- script(src="reviewForm.js") 

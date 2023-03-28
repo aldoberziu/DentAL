@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
 const Trip = require('./../models/tripModel');
+const Clinic = require('./../models/clinicModel');
 
 const reviewSchema = new mongoose.Schema(
   {
     review: {
       type: String,
-      required: [true, 'Review can not be empty'],
     },
     rating: {
       type: Number,
       min: 1,
       max: 5,
+      required: [true, 'Review must have a rating!'],
     },
     createdAt: {
       type: Date,
@@ -24,10 +25,14 @@ const reviewSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Clinic',
     },
-    hotel: {
+    user: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Hotel',
+      ref: 'User',
+      required: [true, 'Review must belong to a user'],
     },
+    offer:{
+      type: String,
+    }
   },
   {
     toJSON: { virtuals: true },
@@ -43,10 +48,15 @@ reviewSchema.pre(/^find/, function (next) {
   });
   next();
 });
+//set the combination of the user and the tour to be unique, so 1 user can review a trip only once
+// reviewSchema.index({ trip: 1, user: 1 }, { unique: true });
+reviewSchema.index({ clinic: 1, user: 1 }, { unique: true });
+
+//mbush review model me t dhenat e userit perkates
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'hotel',
-    select: 'name',
+    path: 'user',
+    select: 'name photo',
   });
   next();
 });
@@ -73,16 +83,15 @@ reviewSchema.statics.calcAverageRating = async function (tripId) {
       },
     },
   ]);
-
   if (stats.length > 0) {
     await Trip.findByIdAndUpdate(tripId, {
       ratingsQuantity: stats[0].nrRating,
-      ratingsAverage: stats[0].avgRating,
+      rating: stats[0].avgRating,
     });
   } else {
     await Trip.findByIdAndUpdate(tripId, {
       ratingsQuantity: 0,
-      ratingsAverage: 0,
+      rating: 4.5,
     });
   }
 };
@@ -97,6 +106,43 @@ reviewSchema.pre(/^findOneAnd/, async function (next) {
 });
 reviewSchema.post(/^findOneAnd/, async function () {
   await this.review.constructor.calcAverageRating(this.review.trip);
+});
+
+reviewSchema.statics.calcAverageRatingClinic = async function (clinicId) {
+  const stats = await this.aggregate([
+    {
+      $match: { clinic: clinicId },
+    },
+    {
+      $group: {
+        _id: '$clinic',
+        nrRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+  if (stats.length > 0) {
+    await Clinic.findByIdAndUpdate(clinicId, {
+      ratingsQuantity: stats[0].nrRating,
+      rating: stats[0].avgRating,
+    });
+  } else {
+    await Clinic.findByIdAndUpdate(clinicId, {
+      ratingsQuantity: 0,
+      rating: 4.5,
+    });
+  }
+};
+reviewSchema.post('save', function () {
+  this.constructor.calcAverageRatingClinic(this.clinic);
+});
+
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.review = await this.findOne();
+  next();
+});
+reviewSchema.post(/^findOneAnd/, async function () {
+  await this.review.constructor.calcAverageRatingClinic(this.review.clinic);
 });
 ////////////////////////////////////////////////////////////////////////////////////
 

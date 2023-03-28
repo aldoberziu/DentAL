@@ -46,63 +46,32 @@ block content
           | our clinics with advanced technology and AI to assist the doctor on
           | the best way.
     .card.mx-2.my-2.card-container(style='width: 18rem;background-color: none;border: none;')
-      img.mx-auto.d-block.mt-3(src='friendly-service.png' style='width: 80px; color: rgba(60, 115, 123, 255)')
+      img.mx-auto.d-block.mt-3(src='personalised-offers.png' style='width: 80px; color: rgba(60, 115, 123, 255)')
       .card-body
         h2.h4.text-center(style='color: rgba(60, 115, 123, 255); font-weight: bold')
-          | Friendly 
+          | Personalised 
           br
-          |             Service
+          |             Offers
         hr
         p.card-text.text-center(style='color: rgba(60, 115, 123, 255)')
-          | We guarantee fast and effective deals in no time so you don&apos;t miss
-          | any second.
-  .form
-    form#contact(action="https://formsubmit.co/berziu2004@gmail.com")
-      .inputs
-        input.feedback-input.input#name(name='name' type='text' placeholder='Name')
-        input.feedback-input.input#email(name='email' type='text' placeholder='Email')
-        input.feedback-input.input#phone(name='phone' type='text' placeholder='Phone Number')
-        select.feedback-input.input#purpose(name='purpose')
-          option.feedback-input(value='collab') Join Our Website
-          option.feedback-input(value='info') Asking for more info
-      .textarea
-        textarea.feedback-input#subject(name='text' placeholder='Subject')
-      input.signup.submit(type='submit' value='SEND')
-  script(src="https://smtpjs.com/v3/smtp.js")
-  script.
-    const nodemailer = require('nodemailer');
-    function sendEmail = options => {
-      const transporter = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-          user: "9cec53d785ffd0",
-          pass: "bf1e082f3d192b"
-        }
-      });
-      const mailOptions = {
-        from: document.getElementById('email').value,
-        to: 'berziu2004@gmail.com',
-        subject: document.getElementById('purpose').value,
-        text: document.getElementById('subject').value,
-      };
-      await transporter.sendMail(mailOptions);
-      await sendEmail({
-        email: document.getElementById('email').value,
-        subject,
-        message,
-      });
-    };
-    function sendEmail(){
-      Email.send({
-          Host : "smtp.mailtrap.com",
-          Username : "berziu2004@gmail.com",
-          Password : "075B596E84FAD4935C8B1ED7C2926EF59BB7",
-          To : 'berziu2004@gmail.com',
-          From : document.getElementById('email').value,
-          Subject : document.getElementById('purpose').value,
-          Body : document.getElementById('subject').value
-      }).then(
-        message => alert(message)
-      );
-    }
+          | Combining trips and clinics on a special deal to make one-time offers only for you on
+          | a discounted price in order to make your experience in Albania unforgettable.
+
+  -if(!user)
+    a(href='/login') Login to send email
+  -else
+    .form
+      form#contact
+        .inputs
+          input.feedback-input.input#name(name='name' type='text' placeholder='Name' value=`${user.name}`)
+          input.feedback-input.input#email(name='email' type='text' placeholder='Email' value=`${user.email}`)
+          input.feedback-input.input#phone(name='phone' type='text' placeholder='Phone Number')
+          select.feedback-input.input#purpose(name='purpose')
+            option.feedback-input(value='collab') Join Our Website
+            option.feedback-input(value='info') Asking for more info
+        .textarea
+          textarea.feedback-input#subject(name='text' placeholder='Subject')
+        input.signup.submit#submitEmail(type='submit' value='SEND')
+    script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')
+    //- script(src="contactEmail.js")
+    

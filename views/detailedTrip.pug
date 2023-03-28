@@ -1,0 +1,129 @@
+extends base
+
+mixin overviewBox(label, text, icon)
+    .overview-box__detail
+        svg.overview-box__icon
+            use(xlink:href=`icons.svg#icon-${icon}`)
+        span.overview-box__label= label
+        span.overview-box__text= text
+mixin reviewCard(review)
+    .reviews__card
+        .reviews__avatar
+            img.reviews__avatar-img(src=`${review.user.photo}`)
+            h6.reviews__user= review.user.name
+        p.reviews__text= review.review
+        .reviews__rating
+            each star in [1,2,3,4,5]
+                svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
+                    use(xlink:href='icons.svg#icon-star')
+        -if(user && (user.role === 'admin' || review.user.id === user.id))
+            .review__delete
+                i.ri-delete-bin-line
+            input#review__url(type='text' style='display:none;' value=`/api/reviews/${review.id}`)
+
+block content 
+    link(rel="stylesheet", href="detailed.css")
+    link(href='https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css' rel='stylesheet')
+    section.section-header
+        .header__hero
+            .header__hero-overlay &nbsp;
+            img.header__hero-img(src=`${doc.imageCover}`)
+
+        .heading-box
+            h1.heading-primary
+                span= `${doc.name}`
+            .heading-box__group
+                .heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href='icons.svg#icon-clock')
+                    span.heading-box__text= `${doc.duration} days`
+                .heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href='icons.svg#icon-map-pin')
+                    span.heading-box__text= `${doc.startLocation.description}`
+                -if(!doc.isAvailable)
+                    .heading-box__detail
+                        svg.heading-box__icon
+                            use(xlink:href='icons.svg#icon-not-available')
+                        span.heading-box__text Not Available
+            .heading-box__group
+                .heading-box__detail
+                    span.heading-box__text= `BY: ${doc.organizer}`
+
+    section.section-description
+        .overview-box
+            div
+                .overview-box__group
+                    h2.heading-secondary.ma-bt-lg Quick facts
+                    -for(let i=0; i<doc.startDates.length;i++)
+                        - const date = doc.startDates[i].toLocaleString('en-us', {month: 'long', year: 'numeric'})
+                        +overviewBox('Starting date', date, 'calendar')
+                    +overviewBox('Price', `${doc.price} L`, 'coin')
+                    +overviewBox('Distance', `${doc.distance} km`, 'distance')
+                    +overviewBox('Rating', `${doc.rating} / 5`, 'star')
+
+                .overview-box__group
+                    h2.heading-secondary.ma-bt-lg Your tour guides
+                each guide in doc.guides
+                    +overviewBox(`${guide}`, '', 'guide')
+        .description-box
+            h2.heading-secondary.ma-bt-lg= `About ${doc.name}`
+            //- - const paragraph = doc.description.split('\n');
+            //- each p in paragraph
+            p.description__text= doc.description
+            -if(user && user.role !== 'admin')
+                .form2
+                    form.review
+                        .rating
+                            input#star1(type='radio' name='star-rating' value='5' checked='checked')
+                            label(for='star1')
+                            input#star2(type='radio' name='star-rating' value='4' checked='checked')
+                            label(for='star2')
+                            input#star3(type='radio' name='star-rating' value='3' checked='checked')
+                            label(for='star3')
+                            input#star4(type='radio' name='star-rating' value='2' checked='checked')
+                            label(for='star4')
+                            input#star5(type='radio' name='star-rating' value='1' checked='checked')
+                            label(for='star5')
+                        input#reviewUrl(type='text' value=`http://127.0.0.1:8000/api/trips/${doc.id}/reviews/trip` style='display:none;')
+                        .textarea
+                            textarea.feedback-input#review(for="review" name='review' placeholder='Review')
+                        .signup
+                            button REVIEW
+
+    section.section-pictures
+        each img, i in doc.photo
+            .picture-box
+                img.picture-box__img(src=`${img}`, alt=`${doc.name} ${i + 1}`, class=`picture-box__img--${i + 1}`)
+
+    section.section-map
+        iframe#map(src=`${doc.destination.coordinates}` style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade')
+
+    section.section-reviews
+        .reviews
+            -if(doc.reviews.length == 0)
+                .overview-box__group
+                    h2.heading-secondary.ma-bt-lg(style='color: white; font-size:17px;display:flex;justify-content:center;') This trip has no reviews, yet. Be the first to submit one!
+            each review in doc.reviews
+                +reviewCard(review)
+
+    section.section-cta
+        .cta
+            .cta__img.cta__img--logo
+                img(src='logo-square-white.png', alt='DentAL logo')
+            img.cta__img.cta__img--1(src=`${doc.photo[1]}`, alt='Trip Image')
+            img.cta__img.cta__img--2(src=`${doc.photo[2]}`, alt='Trip Image')
+            .cta__content
+                h2.heading-secondary What are you waiting for?
+                p.cta__text= `${doc.duration} days. 1 adventure. Infinite memories. Make it yours today!`
+                
+                -if(!user)
+                    a.btn.btn--green.span-all-rows(href='/login') Login to book now
+                -else if(user.role !== 'admin' && doc.isAvailable === true)
+                    a(href=`https://mail.google.com/mail/?view=cm&fs=1&to=info.dentalapp@gmail.com&su=${user.name}+is+interested+in+purchasing+${doc.name}&body=Price:${doc.price}.%0D%0ADuration:${doc.duration} days.%0D%0ADistance:${doc.distance} km.`)
+                        button.btn.btn--green.span-all-rows#book-tour Book trip now!
+                -else
+                    h2.heading-secondary Not Available!
+
+    script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')
+    //- script(src="reviewForm.js") 

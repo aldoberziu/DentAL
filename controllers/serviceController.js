@@ -2,8 +2,9 @@ const Service = require('./../models/serviceModel');
 const factory = require('./../controllers/handlerFactory');
 const catchAsync = require('./../utils/catchAsync');
 
-exports.setClinicId = (req, res, next) => {
+exports.setClinicUserId = (req, res, next) => {
   if (!req.body.clinic) req.body.clinic = req.params.clinicId;
+  if (!req.body.user) req.body.user = req.user.id;
   next();
 };
 exports.getAllServices = catchAsync(async (req, res, next) => {

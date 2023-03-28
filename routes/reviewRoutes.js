@@ -1,23 +1,26 @@
 const express = require('express');
 const reviewController = require('./../controllers/reviewController');
 const serviceController = require('./../controllers/serviceController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router({ mergeParams: true });
+
+router.use(authController.protect);
 
 router
   .route('/trip')
   .get(reviewController.getAllTripReviews)
-  .post(reviewController.setTripId, reviewController.createReview);
-
-router
-  .route('/hotel')
-  .get(reviewController.getAllHotelReviews)
-  .post(reviewController.setHotelId, reviewController.createReview);
+  .post(reviewController.setTripUserId, reviewController.createReview);
 
 router
   .route('/clinic')
   .get(reviewController.getAllClinicReviews)
-  .post(serviceController.setClinicId, reviewController.createReview);
+  .post(serviceController.setClinicUserId, reviewController.createReview);
+
+// router
+//   .route('/offer:id')
+//   .get(reviewController.getAllOfferReviews)
+//   .post(serviceController.setClinicUserId, reviewController.setTripUserId, reviewController.createReview);
 
 router
   .route('/:id')

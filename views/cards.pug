@@ -1,46 +1,48 @@
 extends base
 
-mixin tripCard(destination, image1, image2, image3, ratingsQuantity, rating, duration, distance, link)
+mixin tripCard(destination, imageCover, images, ratingsQuantity, rating, duration, distance, link, availablity)
   .card
     .top-section
-      img(src=`image-test.png` alt='')
+      img(src=`${imageCover}` alt=`${destination}`)
       .image-container
-        .nav
-          img(onclick='change_img(this)' src=`image-test.png` alt='')
-          img(onclick='change_img(this)' src=`image-test.png` alt='')
-          img(onclick='change_img(this)' src=`image-test.png` alt='')
+        .small-nav
+          each image, i in images
+            img(onclick='change_img(this)' src=`${image}` alt=`${destination}`)
       .price= `⭐${rating} | ${ratingsQuantity}🧑`
     #parallelogram
     .product-info
       .name= destination
       .dis= `• ${distance} km`
-      .dis= `• ${duration} dite`
+      .dis= `• ${duration} days`
+      -if(availablity==true)
+        .dis.available= 'Still available'
+      -else
+        .dis.notAvailable= 'Not available ATM'
       a.btn(href=link) Learn More
-mixin offerCard(destination, image1, image2, tripRating, clinicRating, clinicName, link)
+mixin offerCard(distance, duration, nrOfServices, destination, imageCover1, imageCover2, tripRating, clinicRating, clinicName, link)
   .card
     .top-section
       .first-img
-        img(src="image-test.png", alt="")
+        img(src=`${imageCover1}`, alt=`${destination}`)
       .second-img
-        img(src="image2-test.png", alt="")
+        img(src=`${imageCover2}`, alt=`${clinicName}`)
       .price= `🗼${tripRating} | ${clinicRating}🦷`
     //- .square
     #parallelogram
     .product-info
       .name= destination
       .name= clinicName
-      .dis= `• ${distance} km`
-      .dis= `• ${duration} dite`
+      .dis= `• ${distance} km | ${duration} days`
+      .dis= `• ${nrOfServices} services available`
       a.btn(href=link) Learn More
-mixin clinicCard(name, image1, image2, image3, ratingsQuantity, rating, location, description, link)
+mixin clinicCard(name, imageCover, images, ratingsQuantity, rating, location, description, link)
   .card
     .top-section
-      img(src=`image2-test.png` alt='')
+      img(src=`${imageCover}` alt=`${name}`)
       .image-container 
-        .nav
-          img(onclick='change_img(this)' src=`image2-test.png` alt='')
-          img(onclick='change_img(this)' src=`image2-test.png` alt='')
-          img(onclick='change_img(this)' src=`image2-test.png` alt='')
+        .small-nav
+          each image, i in images
+            img(onclick='change_img(this)' src=`${image}` alt=`${name}`)
       .price= `⭐${rating} | ${ratingsQuantity}🧑`
     #parallelogram
     .product-info
@@ -54,11 +56,15 @@ block content
   .main-container
     -if(endpoint === '/trips')
       for trip in docs 
-        +tripCard(trip.destination.address, trip.photo[0], trip.photo[1], trip.photo[2], trip.ratingsQuantity, trip.rating, trip.duration, trip.distance, `trips/${trip._id}`)
+        //- -console.log(trip.destination.address)
+        +tripCard(trip.destination.address, trip.imageCover, trip.photo, trip.ratingsQuantity, trip.rating, trip.duration, trip.distance, `trips-${trip.slug}`, trip.isAvailable)
     -if(endpoint === '/clinics')
       for clinic in docs 
         -const location = clinic.locations?.[0]?.address;
-        +clinicCard(clinic.name, clinic.photo[0], clinic.photo[1], clinic.photo[2], clinic.ratingsQuantity, clinic.rating, location, clinic.description, `clinics/${clinic._id}`)
+        +clinicCard(clinic.name, clinic.imageCover, clinic.photo, clinic.ratingsQuantity, clinic.rating, location, clinic.description, `clinics-${clinic.slug}`)
     -if(endpoint === '/offers')
       -for(let i=0; i<offers.length;i++)
-        +offerCard(offers[i][0].destination.address, offers[i][0].photo[0], offers[i][1].photo[0], offers[i][0].rating, offers[i][1].rating, offers[i][1].name, `/offers/offer-${i + 1}`)
+        -let nrOfServices=0;
+        -for(let j=0; j<offers[i][1].services.length; j++)
+          -nrOfServices++;
+        +offerCard(offers[i][0].distance, offers[i][0].duration, nrOfServices, offers[i][0].destination.address, offers[i][0].imageCover, offers[i][1].imageCover, offers[i][0].rating, offers[i][1].rating, offers[i][1].name, `/offers-${i + 1}`)

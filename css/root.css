@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 :root {
   --main-b-color: rgba(240, 240, 240, 255);
   --primary-color: rgba(60, 115, 123, 255);
@@ -11,93 +12,29 @@
   list-style: none;
   font-family: 'Poppins', sans-serif;
 }
-/* REGION HEADER-----------------------------------------------------------------------*/
-/* main nav */
-.navbar a {
-  text-decoration: none;
-  color: var(--primary-color);
-}
-.logo img {
-  width: 230px;
-  height: 54px;
-}
-.navbar {
+/* REGION LOGIN/SIGNUP-----------------------------------------------------------------------------*/
+.loginForm, .signupForm{
   width: 100%;
-  height: 80px;
-  background-color: white;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  color: rgba(60, 115, 123, 255);
+  justify-content: center;
 }
-.navbar-scroll{
+.loginForm .form2,
+.signupForm .form2{
+  width: 30%;
+  height: 90vh;
+}
+.loginFormTexts{
   width: 100%;
-  height: 80px;
-  background-color: white;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  color: rgba(60, 115, 123, 255);
-  border-bottom: 1px solid var(--primary-color-light);
-  box-shadow: 1px 1px 18px var(--primary-color-light);
+  justify-content: center;
+  /* flex-direction: column; */
 }
-.menu ul {
-  display: flex;
-  align-items: center;
-  padding-top: 20px;
-}
-.menu ul li a {
-  text-decoration: none;
-  color: rgba(60, 115, 123, 255);
-  padding: 5px 22px;
-  letter-spacing: 2px;
-  font-size: 18px;
-}
-.menu ul li a:hover {
-  border-bottom: 4px solid rgba(60, 115, 123, 255);
-  transition: 0.4s;
-}
-
-/* join us button */
-.signup a {
-  text-decoration: none;
-  color: var(--primary-color);
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 12px;
-  padding: 12px 30px;
-  border: 2px solid var(--primary-color);
-  transition: 0.3s;
-}
-.signup a:hover {
-  background: rgba(60, 115, 123, 255);
-  color: #fff;
-}
-/* second nav*/
-.container {
-  margin: none;
-}
-.second-nav {
-  background-color: rgba(245, 245, 245, 255);
-  width: 100%;
-  cursor: default;
-  padding: 15px 0px;
-}
-.second-nav h5 {
-  font-family: Helvetica, sans-serif;
-  font-weight: bold;
-  font-size: 16px;
-  color: grey;
-  text-align: center;
-}
-.second-nav h6 {
-  font-family: Tahoma, sans-serif;
+.loginFormTexts p,
+.loginFormTexts a{
   font-size: 14px;
-  font-weight: lighter;
-  color: darkgray;
-  text-align: center;
+  font-weight: bold;
 }
-/* END REGION HEADER-----------------------------------------------------------------------*/
+/* END REGION LOGIN/SIGNUP-----------------------------------------------------------------------------*/
 
 /* REGION BODY-----------------------------------------------------------------------------*/
 
@@ -145,7 +82,17 @@
   width: 100%;
   height: 100vh;
   background-color: rgba(245, 245, 245, 255);
-  
+}
+.form2{
+  width: 100%;
+  height: 100vh;
+}
+.form2 .inputs{
+  display: flex;
+  flex-direction: column;
+}
+.form2 .textarea .feedback-input{
+  width: 100%;
 }
 form {
   max-width: 80%;
@@ -155,7 +102,15 @@ form {
 form .inputs {
   display: grid;
   grid-template-columns: auto auto;
+  margin: auto;
   padding-top: 6vw;
+  width: 94%;
+}
+.inputs #reviewUrl{
+  width: 95%;
+}
+.review .signup{
+  margin-left: 3%;
 }
 
 .feedback-input {
@@ -212,56 +167,15 @@ form .inputs {
 }
 /* END REGION BODY----------------------------------------------------------------------------*/
 
-/* REGION FOOTER-------------------------------------------------------------------------------*/
-.d-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.banner-text{
+  backdrop-filter:blur(2px);
 }
-.footer {
-  background-color: var(--main-b-color);
-  color: var(--primary-color);
-  z-index: 10000;
+.banner-text h1{
+  font-family: 'Raleway', sans-serif;
 }
-.footer a {
-  text-decoration: none;
-  color: var(--primary-color);
-}
-.footer-container {
-  gap: 2rem;
-}
-
-.company-data {
+.banner-text p{
+  width: 70%;
   display: flex;
-  flex-direction: column;
-  order: 1;
+  margin: auto;
+  font-weight: bold;
 }
-
-.company-description {
-  margin-block: 2rem;
-  max-width: 75%;
-}
-
-.social-media {
-  margin: 20px 0px 20px;
-  margin-left: 3vh;
-}
-.social-media:hover {
-  transform: none;
-}
-
-.copyright-notice {
-  opacity: 0.8;
-}
-
-.footer-list {
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.footer-title {
-  color: var(--primary-color);
-  font-size: 1.6rem;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
-}
-/* END REGION FOOTER---------------------------------------------------------------------------------*/

@@ -14,14 +14,14 @@ const serviceSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A service must have a price!'],
     },
-    priceDiscount: {
+    discountedPrice: {
       type: Number,
-      validate: {
-        validator: function (val) {
-          return val < this.price;
-        },
-        message: 'Discount price ({VALUE}) should be below the regular price',
-      },
+      // validate: {
+      //   validator: function (val) {
+      //     return val < this.price;
+      //   },
+      //   message: 'Discounted price ({VALUE}) should be below the regular price',
+      // },
     },
     description: {
       type: String,
@@ -46,6 +46,10 @@ serviceSchema.pre(/^find/, function (next) {
     path: 'clinic',
     select: 'name',
   });
+  next();
+});
+serviceSchema.pre('save', function (next) {
+  this.discountedPrice = this.price - (this.price / 10)
   next();
 });
 

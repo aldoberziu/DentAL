@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const slugify = require('slugify');
 
 const clinicSchema = new mongoose.Schema(
   {
@@ -24,38 +25,24 @@ const clinicSchema = new mongoose.Schema(
       lowercase: true,
       validate: [validator.isEmail, 'Please provide a valid email'],
     },
-    photo: [Number],
+    photo: [String],
+    imageCover: String,
     description: {
       type: String,
       required: [true, 'Please provide a description about your clinic'],
-    },
-    paymentDetails: {
-      type: Object,
-      default: {},
     },
     rating: {
       type: Number,
       min: [1, 'Rating must be above 1'],
       max: [5, 'Rating must be below 5'],
+      set: (val) => Math.round(val * 10) / 10,
     },
     ratingsQuantity: {
       type: Number,
       default: 0,
     },
-    locations: [
-      {
-        type: {
-          type: String,
-          default: 'Point',
-          enum: ['Point'],
-        },
-        coordinates: [Number],
-        address: {
-          type: String,
-          required: [true, 'A clinic must have an address'],
-        },
-      },
-    ],
+    slug: String,
+    location: String,
   },
   {
     toJSON: { virtuals: true }, //this means that we want virtual properties part of the output
@@ -71,6 +58,11 @@ clinicSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'clinic',
   localField: '_id',
+});
+
+clinicSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 const Clinic = mongoose.model('Clinic', clinicSchema);

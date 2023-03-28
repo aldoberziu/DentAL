@@ -1,35 +1,49 @@
 const express = require('express');
 const viewController = require('../controllers/viewController');
+const authController = require('../controllers/authController');
 const offerController = require('../controllers/offerController');
-const clinicController = require('../controllers/clinicController');
-const tripController = require('../controllers/tripController');
 const clinicRouter = require('./clinicRoutes');
-const hotelRouter = require('./hotelRoutes');
 const tripRouter = require('./tripRoutes');
-const offerRouter = require('./offerRoutes');
 const reviewRouter = require('./reviewRoutes');
 const bookRouter = require('./bookRoutes');
 const serviceRouter = require('./serviceRoutes');
+const userRouter = require('./userRoutes');
+const emailRouter = require('./emailRoutes');
 
 const router = express.Router();
+router.use(authController.isLoggedIn);
+router.get('/signup', viewController.getSignupForm)
+router.get('/login', viewController.getLoginForm)
+router.get('/logout', authController.logout)
+router.get('/me', authController.protect, viewController.getAccount);
 
-router.use('/home', viewController.getHome);
-router.use('/trips', viewController.getAllTrips);
-router.use('/trips:id', tripController.getOneTrip);
+router.get('/home', viewController.getHome);
 
-router.use('/clinics', viewController.getAllClinics);
-router.use('/clinics:id', clinicController.getOneClinic);
+router.get('/trips', viewController.getAllTrips);
+router.get('/trips-:slug', viewController.getOneTrip);
 
-router.use('/offers', offerController.getAllOffers);
-router.use('/offers:id', offerController.getOneOffer);
+router.get('/clinics', viewController.getAllClinics);
+router.get('/clinics-:slug', viewController.getOneClinic);
+
+router.get('/offers', viewController.getAllOffers);
+router.get('/offers-1', viewController.getOfferOne);
+router.get('/offers-2', viewController.getOfferTwo);
+router.get('/offers-3', viewController.getOfferThree);
+router.get('/offers-4', viewController.getOfferFour);
 
 router.use('/api/clinics', clinicRouter);
-router.use('/api/hotels', hotelRouter);
 router.use('/api/trips', tripRouter);
 router.use('/api/reviews', reviewRouter)
-router.use('/api/offers', offerRouter)
-router.use('/api/book', bookRouter)
-router.use('/api/services', serviceRouter)
+router.use('/api/email', emailRouter)
+router.get('/api/offers', offerController.getAllOffers)
+router.get('/api/offer-1', offerController.getOfferOne)
+router.get('/api/offer-2', offerController.getOfferTwo)
+router.get('/api/offer-3', offerController.getOfferThree)
+router.get('/api/offer-4', offerController.getOfferFour)
+router.get('/api/book', bookRouter)
+router.get('/api/services', serviceRouter)
+router.use('/api/users', userRouter)
+
 
 
 module.exports = router;
