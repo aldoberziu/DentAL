@@ -30,9 +30,9 @@ const reviewSchema = new mongoose.Schema(
       ref: 'User',
       required: [true, 'Review must belong to a user'],
     },
-    offer:{
+    offer: {
       type: String,
-    }
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -40,19 +40,17 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+reviewSchema.index({ trip: 1, user: 1 }, { unique: true });
+reviewSchema.index({ clinic: 1, user: 1 }, { unique: true });
+
 //POPULATION///////////////////////////////////////////////////////////////////////////
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'trip',
-    select: 'name',
+    select: 'name slug',
   });
   next();
 });
-//set the combination of the user and the tour to be unique, so 1 user can review a trip only once
-// reviewSchema.index({ trip: 1, user: 1 }, { unique: true });
-reviewSchema.index({ clinic: 1, user: 1 }, { unique: true });
-
-//mbush review model me t dhenat e userit perkates
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
@@ -63,12 +61,10 @@ reviewSchema.pre(/^find/, function (next) {
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'clinic',
-    select: 'name',
+    select: 'name slug',
   });
   next();
 });
-/////////////////////////////////////////////////////////////////////////////////////
-
 //CALCULATE AVERAGE RATING///////////////////////////////////////////////////////////
 reviewSchema.statics.calcAverageRating = async function (tripId) {
   const stats = await this.aggregate([
@@ -91,7 +87,7 @@ reviewSchema.statics.calcAverageRating = async function (tripId) {
   } else {
     await Trip.findByIdAndUpdate(tripId, {
       ratingsQuantity: 0,
-      rating: 4.5,
+      rating: 1,
     });
   }
 };
@@ -107,7 +103,7 @@ reviewSchema.pre(/^findOneAnd/, async function (next) {
 reviewSchema.post(/^findOneAnd/, async function () {
   await this.review.constructor.calcAverageRating(this.review.trip);
 });
-
+//////////////////////////////////////////////////////////////////////////////////
 reviewSchema.statics.calcAverageRatingClinic = async function (clinicId) {
   const stats = await this.aggregate([
     {
@@ -129,7 +125,7 @@ reviewSchema.statics.calcAverageRatingClinic = async function (clinicId) {
   } else {
     await Clinic.findByIdAndUpdate(clinicId, {
       ratingsQuantity: 0,
-      rating: 4.5,
+      rating: 1,
     });
   }
 };

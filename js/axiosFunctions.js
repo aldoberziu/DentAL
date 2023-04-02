@@ -195,7 +195,7 @@ const submitReview = async (review, rating, url) => {
   }
 };
 const submitReviewForm = document.querySelector('.review');
-var rate_value;
+var rate_value = 1;
 if (
   document.getElementById('star1').addEventListener('click', function () {
     rate_value = document.getElementById('star1').value;
@@ -248,6 +248,7 @@ const deleteReview = async (url) => {
   }
 };
 const deleteReviewBtn = document.querySelector('.review__delete');
+console.log('deleteReviewBtn: ', deleteReviewBtn);
 if (deleteReviewBtn) {
   deleteReviewBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -257,66 +258,5 @@ if (deleteReviewBtn) {
   });
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  const signup = async (
-    username,
-    email,
-    password,
-    passwordConfirm,
-    passwordStrength
-  ) => {
-    try {
-      let res;
-      if (passwordStrength === 'Strong') {
-        res = await axios({
-          method: 'POST',
-          url: 'http://127.0.0.1:8000/api/users/signup',
-          data: {
-            name: username,
-            email: email,
-            password: password,
-            passwordConfirm: passwordConfirm,
-          },
-        });
-      }
-      if (res.data.status === 'success') {
-        showAlert('success', 'Logged in Successfully!');
-        window.setTimeout(() => {
-          location.assign('/home');
-        }, 300);
-      }
-    } catch (err) {
-      const message = err.response.data.split(': ')[3].split('<br>')[0];
-      console.log(message);
-      if (message.includes('email_1 dup key')) {
-        showAlert(
-          'error',
-          'That email already belongs to an existing account!'
-        );
-      } else if (
-        message.includes('is shorter than the minimum allowed length')
-      ) {
-        showAlert('error', 'Please provide a longer password (8 characters)');
-      } else if (passwordStrength === 'Weak' || passwordStrength === 'Medium') {
-        showAlert(
-          'error',
-          'Please provide a stronger password! Include symbols,numbers and uppercase letters'
-        );
-      } else {
-        showAlert('error', message);
-      }
-    }
-  };
-  const signupForm = document.querySelector('.signupForm');
-  if (signupForm) {
-    signupForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const username = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const passwordConfirm = document.getElementById('passwordConfirm').value;
-      const passwordStrength =
-        document.getElementById('StrengthDisp').innerText;
-      signup(username, email, password, passwordConfirm, passwordStrength);
-    });
-  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

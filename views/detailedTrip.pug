@@ -11,6 +11,7 @@ mixin reviewCard(review)
         .reviews__avatar
             img.reviews__avatar-img(src=`${review.user.photo}`)
             h6.reviews__user= review.user.name
+        p.reviews__text(style='font-size:12px;')= review.createdAt.toLocaleString('en-us', {day: 'numeric', month: 'short', year: 'numeric'})
         p.reviews__text= review.review
         .reviews__rating
             each star in [1,2,3,4,5]
@@ -58,6 +59,7 @@ block content
                     -for(let i=0; i<doc.startDates.length;i++)
                         - const date = doc.startDates[i].toLocaleString('en-us', {month: 'long', year: 'numeric'})
                         +overviewBox('Starting date', date, 'calendar')
+                    +overviewBox('Departure', `${doc.startLocation.description}`, 'departure')
                     +overviewBox('Price', `${doc.price} L`, 'coin')
                     +overviewBox('Distance', `${doc.distance} km`, 'distance')
                     +overviewBox('Rating', `${doc.rating} / 5`, 'star')
@@ -66,6 +68,13 @@ block content
                     h2.heading-secondary.ma-bt-lg Your tour guides
                 each guide in doc.guides
                     +overviewBox(`${guide}`, '', 'guide')
+                
+                .overview-box__group
+                    br
+                    h2.heading-secondary.ma-bt-lg Stops
+                each stop in doc.stops
+                    +overviewBox(`${stop.address}`, `${stop.duration} min`, 'coffee')
+
         .description-box
             h2.heading-secondary.ma-bt-lg= `About ${doc.name}`
             //- - const paragraph = doc.description.split('\n');
@@ -99,7 +108,7 @@ block content
     section.section-map
         iframe#map(src=`${doc.destination.coordinates}` style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade')
 
-    section.section-reviews
+    section.section-reviews#reviews
         .reviews
             -if(doc.reviews.length == 0)
                 .overview-box__group

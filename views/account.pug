@@ -1,64 +1,26 @@
 extends base
+mixin reviewCard(review)
+    .reviews__card
+        .reviews__avatar
+            img.reviews__avatar-img(src=`${review.user.photo}`)
+            h6.reviews__user= review.user.name
+        -if(review.trip)
+            a(href=`/trips-${review.trip.slug}#reviews` style='text-decoration:none; color:black;')
+                p.reviews__text(style='font-size:12px;')= `Review on ${review.trip.name}`
+        -if(review.clinic)
+            a(href=`/clinics-${review.clinic.slug}#reviews` style='text-decoration:none; color:black;')
+                p.reviews__text(style='font-size:12px;')= `Review on ${review.clinic.name}`
+        p.reviews__text= review.review
+        .reviews__rating
+            each star in [1,2,3,4,5]
+                svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
+                    use(xlink:href='icons.svg#icon-star')
+        .review__delete
+            i.ri-delete-bin-line
+        input#review__url(type='text' style='display:none;' value=`/api/reviews/${review.id}`)
 
 block content
     link(rel="stylesheet", href="detailed.css")
-    //- link(rel="stylesheet", href="header.css")
-    //- section.sticky-top
-    //-     .navbar#main-nav
-    //-         a(href='/home')
-    //-             .logo
-    //-                 img(src="logo.png", alt="")
-    //-         .menu
-    //-             ul
-    //-                 li
-    //-                     a(href='/clinics') Clinics
-    //-                 li
-    //-                     a(href='/trips') Trips
-    //-                 li
-    //-                     a(href='/offers') Offers
-    //-                 li
-    //-                     a(href='#about-us') About 
-    //-                 li
-    //-                     a(href='/home#contact') Contact  
-    //-                 -if(user)
-    //-                     nav.nav.nav--user
-    //-                         //- -if(endpoint !== '/me')
-    //-                         .signup
-    //-                             a.logoutBtn LOGOUT
-    //-                         a.nav__el(href='/me')
-    //-                         -if(user.role === 'admin' && endpoint === '/me')
-    //-                             i.fa.fa-cog(aria-hidden="true" style='color:black;width:16px;height:16px;')
-    //-                         img.nav__user-img(src=`${user.photo}` alt=`Photo of ${user.name}`)
-    //-                 -else if(endpoint !== '/login')       
-    //-                     .signup
-    //-                         a(href='/login') LOGIN
-    //- .d-flex.justify-content-around.second-nav
-    //-   div
-    //-     h5
-    //-       i.fa-solid.fa-location-pin(style='color: rgba(60, 115, 123, 255);')
-    //-       |  Location
-    //-     hr
-    //-     h6 Tirana - Albania
-    //-   div
-    //-     h5
-    //-       i.fa-solid.fa-phone(style='color: rgba(60, 115, 123, 255);')
-    //-       |  Call us today!
-    //-     hr
-    //-     h6
-    //-       | +355682118131
-    //-   div
-    //-     h5
-    //-       i.fa-solid.fa-clock(style='color: rgba(60, 115, 123, 255);')
-    //-       |  Availability
-    //-     hr
-    //-     h6 Mon-Sun: 8:00 - 20:00
-    //-   div
-    //-     h5
-    //-       i.fa-solid.fa-calendar-days(style='color: rgba(60, 115, 123, 255);')
-    //-       |  Book now
-    //-     hr
-    //-     h6 info.dentalapp@gmail.com
-
     main.main
         .user-view
             .user-view__content
@@ -68,6 +30,15 @@ block content
                 .user-view__form-container
                     .form-user-password
                         include _changePassword
+    -if(user.role != 'admin')
+        section.section-reviews
+            .overview-box__group
+                h2.heading-secondary.ma-bt-lg(style='color: white; font-size:25px;display:flex;justify-content:center;') YOUR REVIEWS
+            .reviews
+                -if(reviews.length == 0)
+                    .overview-box__group
+                        h2.heading-secondary.ma-bt-lg(style='color: white; font-size:17px;display:flex;justify-content:center;') You haven't reviewed any trip or service, yet. Submit the first right now!
+                each review in reviews
+                    +reviewCard(review)
     script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')
-    //- script(src="logout.js")
-    //- script(src="accountUpdate.js") 
+    script(src="deleteReviewAccount.js") 

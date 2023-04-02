@@ -13,24 +13,25 @@
   font-family: 'Poppins', sans-serif;
 }
 /* REGION LOGIN/SIGNUP-----------------------------------------------------------------------------*/
-.loginForm, .signupForm{
+.loginForm,
+.signupForm {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 .loginForm .form2,
-.signupForm .form2{
+.signupForm .form2 {
   width: 30%;
   height: 90vh;
 }
-.loginFormTexts{
+.loginFormTexts {
   width: 100%;
   display: flex;
   justify-content: center;
   /* flex-direction: column; */
 }
 .loginFormTexts p,
-.loginFormTexts a{
+.loginFormTexts a {
   font-size: 14px;
   font-weight: bold;
 }
@@ -54,7 +55,7 @@
   height: 70vh;
   text-align: center;
   color: #fff;
-  background-image: url('https://images.pexels.com/photos/305568/pexels-photo-305568.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('banner-image.png');
   background-position: center;
   background-size: cover;
 }
@@ -78,20 +79,20 @@
   letter-spacing: 3px;
 }
 /* form */
-.form{
+.form {
   width: 100%;
   height: 100vh;
   background-color: rgba(245, 245, 245, 255);
 }
-.form2{
+.form2 {
   width: 100%;
   height: 100vh;
 }
-.form2 .inputs{
+.form2 .inputs {
   display: flex;
   flex-direction: column;
 }
-.form2 .textarea .feedback-input{
+.form2 .textarea .feedback-input {
   width: 100%;
 }
 form {
@@ -106,10 +107,10 @@ form .inputs {
   padding-top: 6vw;
   width: 94%;
 }
-.inputs #reviewUrl{
+.inputs #reviewUrl {
   width: 95%;
 }
-.review .signup{
+.review .signup {
   margin-left: 3%;
 }
 
@@ -136,12 +137,12 @@ form .inputs {
   border: 2px solid var(--primary-color-light);
 }
 
-.textarea { 
+.textarea {
   display: flex;
   justify-content: center;
   resize: vertical;
 }
-.textarea .feedback-input{
+.textarea .feedback-input {
   height: 200px;
   width: 80%;
   line-height: 150%;
@@ -167,15 +168,31 @@ form .inputs {
 }
 /* END REGION BODY----------------------------------------------------------------------------*/
 
-.banner-text{
-  backdrop-filter:blur(2px);
+.banner-text {
+  backdrop-filter: blur(2px);
 }
-.banner-text h1{
+.banner-text h1 {
   font-family: 'Raleway', sans-serif;
 }
-.banner-text p{
+.banner-text p {
   width: 70%;
   display: flex;
   margin: auto;
   font-weight: bold;
+}
+.login-to-email-div {
+  width: auto;
+  display: flex;
+  justify-content: center;
+}
+.login-to-email-div a {
+  color: rgb(60, 115, 123);
+  font-size: 17px;
+  margin-bottom: 40px;
+  text-decoration: none;
+  border-bottom: 1px solid rgb(60, 115, 123);
+  transition: ease 400ms;
+}
+.login-to-email-div a:hover{
+  letter-spacing: 0.5px;
 }

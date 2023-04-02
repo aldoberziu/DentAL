@@ -8,7 +8,7 @@ const hideAlert = () => {
     document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
     window.setTimeout(hideAlert, 1500);
   };
-const signup = async (
+  const signup = async (
     username,
     email,
     password,
@@ -38,13 +38,16 @@ const signup = async (
     } catch (err) {
       const message = err.response.data.split(': ')[3].split('<br>')[0];
       console.log(message);
-      if(message.includes('email_1 dup key')){
+      if (message.includes('email_1 dup key')) {
         showAlert('error', 'That email already belongs to an existing account!');
       } else if (message.includes('is shorter than the minimum allowed length')) {
         showAlert('error', 'Please provide a longer password (8 characters)');
-      } else if(passwordStrength === 'Weak' || passwordStrength === 'Medium'){
-        showAlert('error', 'Please provide a stronger password! Include symbols,numbers and uppercase letters');
-      }else{
+      } else if (passwordStrength === 'Weak' || passwordStrength === 'Medium') {
+        showAlert(
+          'error',
+          'Please provide a stronger password! Include symbols,numbers and uppercase letters'
+        );
+      } else {
         showAlert('error', message);
       }
     }

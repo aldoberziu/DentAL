@@ -185,8 +185,9 @@ section.sticky-top
           a(href='/offers') Offers
         li
           a(href='#about-us') About 
-        li
-          a(href='/home#contact') Contact  
+        -if(user && user.role != 'admin')
+          li
+            a(href='/home#contact') Contact  
         -if(user)
           nav.nav.nav--user
             .signup

@@ -1,5 +1,7 @@
 const Trip = require('../models/tripModel');
 const Clinic = require('../models/clinicModel');
+const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
 const Service = require('../models/serviceModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -22,8 +24,8 @@ exports.getOneTrip = catchAsync(async (req, res, next) => {
     fields: 'review rating createdAt',
     options: { sort: '-createdAt' },
   });
-  if(!doc){
-    return next(new AppError('There is no tour with that name.', 404))
+  if (!doc) {
+    return next(new AppError('There is no tour with that name.', 404));
   }
   res.status(200).render('detailedTrip', {
     title: doc.name,
@@ -48,6 +50,9 @@ exports.getOneClinic = catchAsync(async (req, res) => {
       path: 'services',
       fields: 'name price description',
     });
+  if (!doc) {
+    return next(new AppError('There is no tour with that name.', 404));
+  }
   res.status(200).render('detailedClinic', {
     title: doc.name,
     doc,
@@ -150,11 +155,14 @@ exports.getOfferFour = catchAsync(async (req, res, next) => {
     },
   });
 });
-exports.getAccount = (req, res) => {
+exports.getAccount = catchAsync(async (req, res) => {
+  const filter = { user: req.user.id };
+  const reviews = await Review.find(filter);
   res.status(200).render('account', {
     title: 'Your account',
-  })
-};
+    reviews,
+  });
+});
 exports.getLoginForm = (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',

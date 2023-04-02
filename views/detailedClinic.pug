@@ -114,7 +114,7 @@ block content
     section.section-map
         iframe#map(src=`${doc.location}` style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade')
 
-    section.section-reviews
+    section.section-reviews#reviews
         .reviews
             -if(doc.reviews.length == 0)
                 .overview-box__group
@@ -139,4 +139,3 @@ block content
                         button.btn.btn--green.span-all-rows#book-tour Book now!
                 
     script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')
-    //- script(src="reviewForm.js") 

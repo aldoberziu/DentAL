@@ -56,15 +56,15 @@ block content
         p.card-text.text-center(style='color: rgba(60, 115, 123, 255)')
           | Combining trips and clinics on a special deal to make one-time offers only for you on
           | a discounted price in order to make your experience in Albania unforgettable.
-
   -if(!user)
-    a(href='/login') Login to send email
-  -else
+    .login-to-email-div
+      a#emailUs(href='/login') Login to email us
+  -else if(user && user.role != 'admin')
     .form
       form#contact
         .inputs
-          input.feedback-input.input#name(name='name' type='text' placeholder='Name' value=`${user.name}`)
-          input.feedback-input.input#email(name='email' type='text' placeholder='Email' value=`${user.email}`)
+          input.feedback-input.input#name(name='name' type='text' placeholder='Name' value=`${user.name}` readonly="readonly" style='background-color:lightgrey;')
+          input.feedback-input.input#email(name='email' type='text' placeholder='Email' value=`${user.email}` readonly="readonly")
           input.feedback-input.input#phone(name='phone' type='text' placeholder='Phone Number')
           select.feedback-input.input#purpose(name='purpose')
             option.feedback-input(value='collab') Join Our Website
@@ -73,5 +73,4 @@ block content
           textarea.feedback-input#subject(name='text' placeholder='Subject')
         input.signup.submit#submitEmail(type='submit' value='SEND')
     script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')
-    //- script(src="contactEmail.js")
     

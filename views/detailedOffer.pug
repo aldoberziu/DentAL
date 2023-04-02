@@ -44,13 +44,29 @@ block content
                     svg.heading-box__icon
                         use(xlink:href='icons.svg#icon-email')
                     span.heading-box__text.email= `${offer.clinic.email}`
+            .heading-box__group
                 .heading-box__detail
-                    span.heading-box__text= `BY: ${offer.trip.organizer}`
+                    svg.heading-box__icon
+                        use(xlink:href='icons.svg#icon-clock')
+                    span.heading-box__text= `${offer.trip.duration} days`
+                .heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href='icons.svg#icon-map-pin')
+                    span.heading-box__text= `${offer.trip.startLocation.description}`
+                -if(!offer.trip.isAvailable)
+                    .heading-box__detail
+                        svg.heading-box__icon
+                            use(xlink:href='icons.svg#icon-not-available')
+                        span.heading-box__text Not Available
+                -else
+                    .heading-box__detail
+                        span.heading-box__text= `BY: ${offer.trip.organizer}`
+                
 
     section.section-description
         .overview-box
             div
-                .overview-box__group
+                .overview-box__group#description
                     .description-box
                         h2.heading-secondary.ma-bt-lg= `About ${offer.clinic.name}`
                         p.description__text= offer.clinic.description
@@ -97,7 +113,7 @@ block content
                 -for(let i=0; i<offer.trip.startDates.length;i++)
                     - const date = offer.trip.startDates[i].toLocaleString('en-us', {month: 'long', year: 'numeric'})
                     +overviewBoxTrip('Starting date', date, 'calendar')
-                +overviewBoxTrip('Price', `${offer.trip.discountedPrice} L`, 'coin')
+                +overviewBoxTrip('Price', `*${offer.trip.discountedPrice} L`, 'coin')
                 +overviewBoxTrip('Distance', `${offer.trip.distance} km`, 'distance')
                 +overviewBoxTrip('Rating', `${offer.trip.rating} / 5`, 'star')
                 -if(user && user.role !== 'admin')
@@ -133,9 +149,11 @@ block content
                 h2.heading-secondary What are you waiting for?
                 p.cta__text= `Good oral health. Amazing albanian adventure. Get the double opportunity now!`
                 
-                -//data-tour-id='${tour.id}' in order to access /:tourId
-                button.btn.btn--green.span-all-rows#book-tour() Book the deal here!
-                //h2.heading-secondary Not Available!
+                -if(!user)
+                    a.btn.btn--green.span-all-rows(href='/login') Login to book now
+                -else if(user.role !== 'admin')
+                    a(href=`http://127.0.0.1:8000${endpoint}#description`)
+                        button.btn.btn--green.span-all-rows#book-tour Book the deal here!
 
                 //- a.btn.btn--green.span-all-rows(href='/login') Login to book now
     script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')

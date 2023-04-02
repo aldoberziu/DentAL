@@ -9,6 +9,7 @@ const tripSchema = new mongoose.Schema(
       trim: true,
       min: [5, 'A trip name must have more than 5 characters!'],
       unique: true,
+      select: true,
     },
     description: {
       type: String,
@@ -104,11 +105,6 @@ const tripSchema = new mongoose.Schema(
 //localField is what content are we gonna send to the foreignField
 tripSchema.virtual('reviews', {
   ref: 'Review',
-  foreignField: 'trip',
-  localField: '_id',
-});
-tripSchema.virtual('booking', {
-  ref: 'Booking',
   foreignField: 'trip',
   localField: '_id',
 });
