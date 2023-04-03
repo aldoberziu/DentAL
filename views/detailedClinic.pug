@@ -100,7 +100,7 @@ block content
                             label(for='star4')
                             input#star5(type='radio' name='star-rating' value='1' checked='checked')
                             label(for='star5')
-                        input#reviewUrl(type='text' value=`http://127.0.0.1:8000/api/clinics/${doc.id}/reviews/clinic` style='display:none;')
+                        input#reviewUrl(type='text' value=`https://dental-app-oxvg.onrender.com/api/clinics/${doc.id}/reviews/clinic` style='display:none;')
                         .textarea
                             textarea.feedback-input#review(for="review" name='review' placeholder='Review')
                         .signup
@@ -135,7 +135,7 @@ block content
                 -if(!user)
                     a.btn.btn--green.span-all-rows(href='/login') Login to book now
                 -else if(user.role !== 'admin')
-                    a(href=`http://127.0.0.1:8000/clinics-${doc.slug}#description`)
+                    a(href=`https://dental-app-oxvg.onrender.com/clinics-${doc.slug}#description`)
                         button.btn.btn--green.span-all-rows#book-tour Book now!
                 
     script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')

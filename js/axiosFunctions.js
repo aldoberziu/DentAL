@@ -14,8 +14,8 @@ const updateSettings = async (data, type) => {
   try {
     const url =
       type === 'password'
-        ? 'http://127.0.0.1:8000/api/users/updateMyPassword'
-        : 'http://127.0.0.1:8000/api/users/updateMe';
+        ? 'https://dental-app-oxvg.onrender.com/api/users/updateMyPassword'
+        : 'https://dental-app-oxvg.onrender.com/api/users/updateMe';
     const res = await axios({
       method: 'PATCH',
       url,
@@ -75,7 +75,7 @@ const contactEmail = async (phoneNumber, purpose, subject, email) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/email',
+      url: 'https://dental-app-oxvg.onrender.com/api/email',
       data: {
         phoneNumber,
         purpose,
@@ -115,7 +115,7 @@ const login = async (email, password) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/users/login',
+      url: 'https://dental-app-oxvg.onrender.com/api/users/login',
       data: {
         email: email,
         password: password,
@@ -148,7 +148,7 @@ const logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: 'http://127.0.0.1:8000/api/users/logout',
+      url: 'https://dental-app-oxvg.onrender.com/api/users/logout',
     });
     if ((res.data.status = 'success')) {
       showAlert('success', 'Logged out successfully!');

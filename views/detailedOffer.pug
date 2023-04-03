@@ -132,8 +132,8 @@ block content
                                     input#star5(type='radio' name='star-rating' value='1' checked='checked')
                                     label(for='star5')
                                 select.feedback-input.input#reviewUrl(name='doc-to-be-reviewed')
-                                    option.feedback-input(value=`http://127.0.0.1:8000/api/trips/${offer.trip.id}/reviews/trip`) Reviewing the trip
-                                    option.feedback-input(value=`http://127.0.0.1:8000/api/clinics/${offer.clinic.id}/reviews/clinic`) Reviewing the clinic
+                                    option.feedback-input(value=`https://dental-app-oxvg.onrender.com/api/trips/${offer.trip.id}/reviews/trip`) Reviewing the trip
+                                    option.feedback-input(value=`https://dental-app-oxvg.onrender.com/api/clinics/${offer.clinic.id}/reviews/clinic`) Reviewing the clinic
                             .textarea
                                 textarea.feedback-input#review(for="review" name='review' placeholder='Review')
                             .signup
@@ -152,7 +152,7 @@ block content
                 -if(!user)
                     a.btn.btn--green.span-all-rows(href='/login') Login to book now
                 -else if(user.role !== 'admin')
-                    a(href=`http://127.0.0.1:8000${endpoint}#description`)
+                    a(href=`https://dental-app-oxvg.onrender.com${endpoint}#description`)
                         button.btn.btn--green.span-all-rows#book-tour Book the deal here!
 
                 //- a.btn.btn--green.span-all-rows(href='/login') Login to book now

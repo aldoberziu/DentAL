@@ -20,7 +20,7 @@ const hideAlert = () => {
       if (passwordStrength === 'Strong') {
         res = await axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/api/users/signup',
+          url: 'https://dental-app-oxvg.onrender.com/api/users/signup',
           data: {
             name: username,
             email: email,
