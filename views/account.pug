@@ -15,9 +15,9 @@ mixin reviewCard(review)
             each star in [1,2,3,4,5]
                 svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
                     use(xlink:href='icons.svg#icon-star')
-        .review__delete
-            i.ri-delete-bin-line
-        input#review__url(type='text' style='display:none;' value=`/api/reviews/${review.id}`)
+        //- .review__delete
+        //-     i.ri-delete-bin-line
+        //- input#review__url(type='text' style='display:none;' value=`/api/reviews/${review.id}`)
 
 block content
     link(rel="stylesheet", href="detailed.css")
@@ -40,5 +40,3 @@ block content
                         h2.heading-secondary.ma-bt-lg(style='color: white; font-size:17px;display:flex;justify-content:center;') You haven't reviewed any trip or service, yet. Submit the first right now!
                 each review in reviews
                     +reviewCard(review)
-    script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')
-    script(src="deleteReviewAccount.js") 

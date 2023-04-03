@@ -9,13 +9,21 @@ mixin overviewBoxTrip(label, text, icon)
 mixin reviewCard(review)
     .reviews__card
         .reviews__avatar
-            img.reviews__avatar-img(src=`user-icon.png`)
-            h6.reviews__user= review.username
+            img.reviews__avatar-img(src=review.user.photo)
+            h6.reviews__user= review.user.name
+        -if(review.trip)
+            p.reviews__text(style='font-size:12px;')= `Review on ${review.trip.name}`
+        -if(review.clinic)
+            p.reviews__text(style='font-size:12px;')= `Review on ${review.clinic.name}`
         p.reviews__text= review.review
         .reviews__rating
             each star in [1,2,3,4,5]
                 svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
                     use(xlink:href='icons.svg#icon-star')
+        -if(user && (user.role === 'admin' || review.user.id === user.id))
+            .review__delete
+                i.ri-delete-bin-line
+            input#review__url(type='text' style='display:none;' value=`/api/reviews/${review.id}`)
 
 block content 
     link(rel="stylesheet", href="detailed.css")
@@ -71,6 +79,8 @@ block content
                         h2.heading-secondary.ma-bt-lg= `About ${offer.clinic.name}`
                         p.description__text= offer.clinic.description
                     br
+                    h2.heading-secondary.ma-bt-lg Rating
+                    +overviewBoxTrip('', `${offer.clinic.rating} / 5`, 'star')
                     h2.heading-secondary.ma-bt-lg Services
                     -if(offer.services === 0 || offer.services === '' || offer.services === null)
                         span.overview-box__label This clinic has no services
@@ -139,6 +149,14 @@ block content
                             .signup
                                 button REVIEW
 
+    section.section-reviews#reviews
+        .reviews
+            -if(offer.reviews.length == 0)
+                .overview-box__group
+                    h2.heading-secondary.ma-bt-lg(style='color: white; font-size:17px;display:flex;justify-content:center;') This clinic has no reviews, yet. Be the first to submit one!
+            -for(let i=0;i<offer.reviews.length;i++)
+                +reviewCard(offer.reviews[i])
+
     section.section-cta
         .cta
             .cta__img.cta__img--logo
@@ -154,7 +172,3 @@ block content
                 -else if(user.role !== 'admin')
                     a(href=`https://dental-app-oxvg.onrender.com${endpoint}#description`)
                         button.btn.btn--green.span-all-rows#book-tour Book the deal here!
-
-                //- a.btn.btn--green.span-all-rows(href='/login') Login to book now
-    script(type='module' src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js')
-    //- script(src="reviewForm.js") 

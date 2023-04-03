@@ -10,7 +10,8 @@ mixin reviewCard(review)
     .reviews__card
         .reviews__avatar
             img.reviews__avatar-img(src=`${review.user.photo}`)
-            h6.reviews__user= review.user.name
+            a(href='/me')
+                h6.reviews__user= review.user.name
         p.reviews__text(style='font-size:12px;')= review.createdAt.toLocaleString('en-us', {day: 'numeric', month: 'short', year: 'numeric'})
         p.reviews__text= review.review
         .reviews__rating

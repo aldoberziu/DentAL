@@ -100,58 +100,78 @@ exports.getAllOffers = catchAsync(async (req, res, next) => {
   next();
 });
 exports.getOfferOne = catchAsync(async (req, res, next) => {
-  const trip = await Trip.findById('62fe13a5cba5dd07449aa821');
-  const clinic = await Clinic.findById('62f6414531c6012fd40be044');
+  const trip = await Trip.findById('62fe13a5cba5dd07449aa821')
+  const clinic = await Clinic.findById('62f6414531c6012fd40be044')
   const filter = { clinic: clinic };
   const services = await Service.find(filter);
+  const tripFilter = { trip: trip };
+  const tripReviews = await Review.find(tripFilter);
+  const clinicReviews = await Review.find(filter);
+  const reviews = [...tripReviews, ...clinicReviews];
   res.status(200).render('detailedOffer', {
     title: 'Offer 1',
     offer: {
       trip,
       clinic,
       services,
+      reviews,
     },
   });
 });
 exports.getOfferTwo = catchAsync(async (req, res, next) => {
-  const trip = await Trip.findById('62fe14b0cba5dd07449aa828');
-  const clinic = await Clinic.findById('63315893ef62f42fc45260b1');
+  const trip = await Trip.findById('62fe14b0cba5dd07449aa828')
+  const clinic = await Clinic.findById('63315893ef62f42fc45260b1')
   const filter = { clinic: clinic };
   const services = await Service.find(filter);
+  const tripFilter = { trip: trip };
+  const tripReviews = await Review.find(tripFilter);
+  const clinicReviews = await Review.find(filter);
+  const reviews = [...tripReviews, ...clinicReviews];
   res.status(200).render('detailedOffer', {
     title: 'Offer 2',
     offer: {
       trip,
       clinic,
       services,
+      reviews,
     },
   });
 });
 exports.getOfferThree = catchAsync(async (req, res, next) => {
-  const trip = await Trip.findById('62fe13a5cba5dd07449aa821');
-  const clinic = await Clinic.findById('62f6426331c6012fd40be04c');
+  const trip = await Trip.findById('62fe13a5cba5dd07449aa821')
+  const clinic = await Clinic.findById('62f6426331c6012fd40be04c')
   const filter = { clinic: clinic };
   const services = await Service.find(filter);
+  const tripFilter = { trip: trip };
+  const tripReviews = await Review.find(tripFilter);
+  const clinicReviews = await Review.find(filter);
+  const reviews = [...tripReviews, ...clinicReviews];
   res.status(200).render('detailedOffer', {
     title: 'Offer 1',
     offer: {
       trip,
       clinic,
       services,
+      reviews,
     },
   });
 });
 exports.getOfferFour = catchAsync(async (req, res, next) => {
-  const trip = await Trip.findById('62fe14b0cba5dd07449aa828');
-  const clinic = await Clinic.findById('6367ec1ca0bfaf07008cd1dd');
+  const trip = await Trip.findById('62fe14b0cba5dd07449aa828')
+  const clinic = await Clinic.findById('6367ec1ca0bfaf07008cd1dd')
   const filter = { clinic: clinic };
   const services = await Service.find(filter);
+  const tripFilter = { trip: trip };
+  const tripReviews = await Review.find(tripFilter);
+  const clinicReviews = await Review.find(filter);
+  const reviews = [...tripReviews, ...clinicReviews];
   res.status(200).render('detailedOffer', {
     title: 'Offer 4',
     offer: {
       trip,
       clinic,
       services,
+      reviews,
     },
   });
 });
