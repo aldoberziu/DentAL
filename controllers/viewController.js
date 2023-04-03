@@ -120,7 +120,7 @@ exports.getOfferOne = catchAsync(async (req, res, next) => {
 });
 exports.getOfferTwo = catchAsync(async (req, res, next) => {
   const trip = await Trip.findById('62fe14b0cba5dd07449aa828')
-  const clinic = await Clinic.findById('63315893ef62f42fc45260b1')
+  const clinic = await Clinic.findById('62f641cb31c6012fd40be046')
   const filter = { clinic: clinic };
   const services = await Service.find(filter);
   const tripFilter = { trip: trip };
@@ -138,8 +138,8 @@ exports.getOfferTwo = catchAsync(async (req, res, next) => {
   });
 });
 exports.getOfferThree = catchAsync(async (req, res, next) => {
-  const trip = await Trip.findById('62fe13a5cba5dd07449aa821')
-  const clinic = await Clinic.findById('62f6426331c6012fd40be04c')
+  const trip = await Trip.findById('63be92bfdc39712b80b8654e')
+  const clinic = await Clinic.findById('62f6420931c6012fd40be048')
   const filter = { clinic: clinic };
   const services = await Service.find(filter);
   const tripFilter = { trip: trip };
@@ -157,8 +157,8 @@ exports.getOfferThree = catchAsync(async (req, res, next) => {
   });
 });
 exports.getOfferFour = catchAsync(async (req, res, next) => {
-  const trip = await Trip.findById('62fe14b0cba5dd07449aa828')
-  const clinic = await Clinic.findById('6367ec1ca0bfaf07008cd1dd')
+  const trip = await Trip.findById('63be92bfdc39712b80b8654e')
+  const clinic = await Clinic.findById('62f6426331c6012fd40be04c')
   const filter = { clinic: clinic };
   const services = await Service.find(filter);
   const tripFilter = { trip: trip };
