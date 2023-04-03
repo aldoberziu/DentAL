@@ -37,7 +37,6 @@ const hideAlert = () => {
       }
     } catch (err) {
       const message = err.response.data.split(': ')[3].split('<br>')[0];
-      console.log(message);
       if (message.includes('email_1 dup key')) {
         showAlert('error', 'That email already belongs to an existing account!');
       } else if (message.includes('is shorter than the minimum allowed length')) {

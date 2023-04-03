@@ -159,7 +159,7 @@ exports.restrictTo = (...roles) => {
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   //1) get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
-  console.log(user)
+  // console.log(user)
   if (!user) {
     return next(new AppError('There is no user with that email address', 404));
   }
@@ -200,7 +200,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     passwordResetToken: hashedToken,
     passwordResetExpires: { $gt: Date.now() },
   });
-  console.log(user);
+  // console.log(user);
 
   //2) if token has not expired and if there is a user, set new pass
   if (!user) {

@@ -19,7 +19,6 @@ const deleteReview = async (url) => {
       location.reload(true);
     }
   } catch (err) {
-    console.log(err.response);
     showAlert('error', 'Error deleting! Try again.');
   }
 };

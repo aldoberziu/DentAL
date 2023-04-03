@@ -30,7 +30,6 @@ const updateSettings = async (data, type) => {
     }
   } catch (err) {
     const message = err.response.data.split(': ')[1].split('<br>')[0];
-    console.log('message: ', message);
     showAlert('error', message);
   }
 };
@@ -90,9 +89,8 @@ const contactEmail = async (phoneNumber, purpose, subject, email) => {
       }, 300);
     }
   } catch (err) {
-    const message = err.response.data;
-    console.log(message);
-    if (message.includes('email_1 dup key:')) {
+    const message = err.response.data.split('<pre>')[1].split('</pre>');
+    if (message.includes('Internal Server Error')) {
       showAlert('error', 'You have sent an email once!');
     } else {
       showAlert('error', err.response.data.message);
@@ -128,8 +126,7 @@ const login = async (email, password) => {
       }, 300);
     }
   } catch (err) {
-    console.log(err.response.data);
-    const message = err.response.data.split(': ')[1].split('<br>')[0];
+    const message = err.response.data.split('<pre>')[1].split('</pre>')[0];
     showAlert('error', message);
   }
 };
@@ -157,7 +154,6 @@ const logout = async () => {
       }, 1000);
     }
   } catch (err) {
-    console.log(err.response);
     showAlert('error', 'Error logging out! Try again.');
   }
 };
@@ -183,15 +179,12 @@ const submitReview = async (review, rating, url) => {
       }, 300);
     }
   } catch (err) {
-    const message = err.response.data.split(': ')[3].split('<br>')[0];
-    if (message === 'clinic_1_user_1 dup key') {
+    const message = err.response.data.split('<pre>')[1].split('</pre>')[0];
+    if (message === 'Internal Server Error') {
       showAlert('error', 'You have reviewed once!');
-    } else if (message.includes('type string')) {
-      showAlert('error', 'Please rate using numbers 1-5 !');
     } else {
       showAlert('error', message);
     }
-    console.log(err.response);
   }
 };
 const submitReviewForm = document.querySelector('.review');
@@ -243,17 +236,14 @@ const deleteReview = async (url) => {
       location.reload(true);
     }
   } catch (err) {
-    console.log(err.response);
     showAlert('error', 'Error deleting! Try again.');
   }
 };
 const deleteReviewBtn = document.querySelector('.review__delete');
-console.log('deleteReviewBtn: ', deleteReviewBtn);
 if (deleteReviewBtn) {
   deleteReviewBtn.addEventListener('click', (e) => {
     e.preventDefault();
     const url = document.getElementById('review__url').value;
-    console.log('url: ', url);
     deleteReview(url);
   });
 }
