@@ -127,6 +127,9 @@ const login = async (email, password) => {
     }
   } catch (err) {
     const message = err.response.data.split('<pre>')[1].split('</pre>')[0];
+    if(message.includes('Unauthorized')){
+      showAlert('error', 'Please check your credentials!');
+    }
     showAlert('error', message);
   }
 };
